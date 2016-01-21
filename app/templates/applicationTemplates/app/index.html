@@ -5,6 +5,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="description" content="<%= projectDescription %>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Disable tap highlight on IE -->
+	<meta name="msapplication-tap-highlight" content="no">
 	<title><%= projectName %></title>
 	<!-- Add to homescreen -->
 	<link rel="manifest" href="manifest.json">
@@ -42,12 +44,18 @@
 		Loading ...
 	</app>
 
+	<!--
+        Angular 2 polyfills (zone.js, reflect-metadata, ...) must be loaded BEFORE SystemJS
+    -->
+	<!-- inline node_modules/angular2/bundles/angular2-polyfills.js -->
+	<script inline src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+	
 	<!-- build:js-app -->
 	<!-- for production, this is all replaced by a minified bundle -->
 	<script src="jspm_packages/system.src.js"></script>
 	<script src="jspm.conf.js"></script>
 	<script>
-		System.import('core/core.bootstrap').catch(console.error.bind(console));
+		System.import('core/boot').catch(console.error.bind(console));
 	</script>
 	<!-- endbuild -->
 </body>

@@ -1,21 +1,22 @@
 {
-  "version": "1.7.0",
+  "version": "1.7.3",
   "compilerOptions": {
-	"target": "es6",
+	"target": "es5",
+	"module": "commonjs",
 	"declaration": false,
-	"noImplicitAny": false,
-	"removeComments": true,
-	"noLib": false,
+	"noImplicitAny": true,
+	"suppressImplicitAnyIndexErrors": true,
+	"removeComments": false,
 	"emitDecoratorMetadata": true,
 	"experimentalDecorators": true,
-	"experimentalAsyncFunctions": true,
-	"noResolve": true,
 	"noEmitOnError": false,
 	"preserveConstEnums": true,
 	"inlineSources": false,
 	"sourceMap": false,
-	"outDir": "./app",
-	"project": "./app"
+	"outDir": "./.tmp",
+	"rootDir": "./app",
+	"moduleResolution": "node",
+	"listFiles": false
   },
   "formatCodeOptions": {
 	"indentSize": 2,
@@ -31,11 +32,10 @@
 	"placeOpenBraceOnNewLineForFunctions": false,
 	"placeOpenBraceOnNewLineForControlBlocks": false
   },
-  "filesGlob": [
-	"./app/**/*.ts"
-  ],
   "exclude": [
 	"node_modules",
-	"jspm_packages"
+	"jspm_packages",
+	"typings/browser",
+	"typings/browser.d.ts"
   ]
 }

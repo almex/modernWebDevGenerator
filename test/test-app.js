@@ -1,22 +1,20 @@
 "use strict";
 
 const path = require("path");
-//const os = require("os");
-const assert = require("yeoman-generator").assert;
-const helpers = require("yeoman-generator").test;
 
-const config = require("../gulp/config");
+const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
 
 describe("modern-web-dev:app", () =>{
 	before((done) =>{
-		helpers.run(path.join(__dirname, "../" + config.folders.dist)) // jshint ignore:line
+		helpers.run(path.join(__dirname, "../app")) // jshint ignore:line
 			.withOptions({
 				skipInstall: true
 			})
 			.withPrompts(
-			{
-				someOption: true
-			})
+				{
+					someOption: true
+				})
 			.on("end", done);
 
 		//.withOptions({ foo: 'bar' })    // Mock options passed in
@@ -34,7 +32,6 @@ describe("modern-web-dev:app", () =>{
 			"gulpfile.babel.js",
 			"jspm.conf.js",
 			"tsconfig.json",
-			"tsd.json",
 			"tslint.json"
 		]);
 	});

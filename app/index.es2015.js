@@ -1,8 +1,12 @@
 "use strict";
 
+const packageJSON = require("../package.json");
+
 import yeoman from "yeoman-generator";
 import yosay  from "yosay";
 import chalk from "chalk";
+import updateNotifier from "update-notifier";
+import stringLength from "string-length";
 
 const descriptors = {
 	projectName: {
@@ -55,9 +59,27 @@ const descriptors = {
 	}
 };
 
+function checkForUpdates() {
+	const notifier = updateNotifier({
+		pkg: packageJSON
+		//,updateCheckInterval: 1 // useful for debugging
+	});
+	
+	let message = [];
+	
+	let retVal;
+
+	if (notifier.update) {
+		message.push("Update available: " + chalk.green.bold(notifier.update.latest) + chalk.gray(" (current: " + notifier.update.current + ")"));
+		message.push("Run " + chalk.magenta("npm install -g " + packageJSON.name) + " to update.");
+		retVal = yosay(message.join(" "), {maxLength: stringLength(message[0])});
+	}
+	return retVal;
+}
+
 let modernWebDevGenerator = yeoman.Base.extend({
 
-	constructor: function(){
+	constructor: function () {
 		// Setup the base generator
 		yeoman.Base.apply(this, arguments);
 
@@ -105,12 +127,19 @@ let modernWebDevGenerator = yeoman.Base.extend({
 	},
 
 	// contexts list: http://yeoman.io/authoring/running-context.html
-	prompting: function(){
+	prompting: function () {
 		let done = this.async();
+		
+		const welcomeMessage = yosay("Welcome to the " + chalk.green("ModernWebDev") + " Yeoman Generator (v" + packageJSON.version + ")");
+		const updateMessage = checkForUpdates();
 
-		// Have Yeoman greet the user.
-		this.log(yosay("Welcome to the " + chalk.green("ModernWebDev") + " Yeoman Generator"));
-
+		// Have Yeoman greet the user
+		if(updateMessage){
+			this.log(updateMessage);
+		}else{
+			this.log(welcomeMessage);
+		}
+		
 		const prompts = [
 			{
 				type: "input",
@@ -162,7 +191,7 @@ let modernWebDevGenerator = yeoman.Base.extend({
 			}
 		];
 
-		this.prompt(prompts, answers =>{
+		this.prompt(prompts, answers => {
 			this.props = answers; // to access props later use this.props.someOption;
 
 			done();
@@ -170,12 +199,12 @@ let modernWebDevGenerator = yeoman.Base.extend({
 	},
 
 	configuring: {
-		projectFiles: function(){
+		projectFiles: function () {
 			// copy files that do not need pre-processing
 			this.directory("./projectFiles/", ".");
 		},
 
-		projectTemplates: function(){
+		projectTemplates: function () {
 			const projectTemplatesFolder = "./projectTemplates/";
 
 			// copy all files that need specific processing
@@ -191,12 +220,12 @@ let modernWebDevGenerator = yeoman.Base.extend({
 	},
 
 	writing: {
-		applicationFiles: function(){
+		applicationFiles: function () {
 			// copy files that do not need pre-processing
 			this.directory("./applicationFiles/", ".");
 		},
 
-		applicationTemplates: function(){
+		applicationTemplates: function () {
 			const applicationTemplatesFolders = "./applicationTemplates/";
 
 			// copy all files that need specific processing
@@ -219,15 +248,16 @@ let modernWebDevGenerator = yeoman.Base.extend({
 		}
 	},
 
-	install: function(){
-		const skipInstall = this.options[ "skip-install" ];
+	install: function () {
+		const skipInstall = this.options["skip-install"];
 
 		this.log("Project created successfully. Enjoy!");
 
-		if(skipInstall){
+		if (skipInstall) {
 			this.log("Run 'npm run setup' to install all required dependencies. Check out the README file instructions");
-		} else{
-			this.spawnCommand("npm", [ "run", "setup" ]);
+		} else {
+			this.log("Go grab a coffee, I'll start installing the dependencies... (which may take a while)");
+			this.spawnCommand("npm", ["run", "setup"]);
 		}
 	}
 

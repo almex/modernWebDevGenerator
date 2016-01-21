@@ -13,7 +13,6 @@ const folders = {
 	src: "./app",
 	templates: "./app/templates",
 	srcPkg: "./gulp",
-	tests: "./test",
 	nodeModules: "./node_modules"
 };
 
@@ -42,11 +41,10 @@ const javascript = {
 		folders.srcPkg + globs.scripts.javascript,
 		utils.exclude(folders.templates + globs.scripts.javascript)
 	],
-	dest: folders.dist,
-	tests: folders.tests + globs.scripts.javascript
+	dest: folders.dist
 };
 
-module.exports = {
+export default {
 	extensions,
 	folders,
 	globs,

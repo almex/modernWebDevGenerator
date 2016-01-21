@@ -1,4 +1,17 @@
 sudo: false
 language: node_js
+cache:
+  directories:
+  - node_modules
+  - jspm_packages
+branches:
+  only:
+  - master
+notifications:
+  email: true
 node_js:
-  - '0.12'
+  - '4.2'
+before_script:
+  - npm prune
+before_install:
+  - npm run setup
